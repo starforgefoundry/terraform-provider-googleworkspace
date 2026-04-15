@@ -14,6 +14,7 @@ import (
 	"google.golang.org/api/cloudidentity/v1"
 	"google.golang.org/api/gmail/v1"
 	"google.golang.org/api/groupssettings/v1"
+	"google.golang.org/api/licensing/v1"
 )
 
 func GetChromePoliciesService(chromePolicyService *chromepolicy.Service) (*chromepolicy.CustomersPoliciesService, diag.Diagnostics) {
@@ -339,6 +340,23 @@ func GetTransferApplicationsService(dataTransferService *datatransfer.Service) (
 	}
 
 	return applicationsService, diags
+}
+
+func GetLicenseAssignmentsService(licensingService *licensing.Service) (*licensing.LicenseAssignmentsService, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	log.Printf("[INFO] Instantiating Google Enterprise License Manager LicenseAssignments service")
+	licenseAssignmentsService := licensingService.LicenseAssignments
+	if licenseAssignmentsService == nil {
+		diags = append(diags, diag.Diagnostic{
+			Severity: diag.Error,
+			Summary:  "LicenseAssignments Service could not be created.",
+		})
+
+		return nil, diags
+	}
+
+	return licenseAssignmentsService, diags
 }
 
 func GetDynamicGroupsService(cloudIdentityService *cloudidentity.Service) (*cloudidentity.GroupsService, diag.Diagnostics) {

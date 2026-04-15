@@ -21,6 +21,7 @@ import (
 	"google.golang.org/api/gmail/v1"
 	"google.golang.org/api/groupssettings/v1"
 	"google.golang.org/api/impersonate"
+	"google.golang.org/api/licensing/v1"
 	"google.golang.org/api/option"
 	"google.golang.org/api/transport"
 )
@@ -271,6 +272,28 @@ func (c *apiClient) NewDataTransferService() (*datatransfer.Service, diag.Diagno
 	}
 
 	return dataTransferService, diags
+}
+
+func (c *apiClient) NewLicensingService() (*licensing.Service, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	log.Printf("[INFO] Instantiating Google Enterprise License Manager service")
+
+	licensingService, err := licensing.NewService(context.Background(), option.WithHTTPClient(c.client))
+	if err != nil {
+		return nil, diag.FromErr(err)
+	}
+
+	if licensingService == nil {
+		diags = append(diags, diag.Diagnostic{
+			Severity: diag.Error,
+			Summary:  "Licensing Service could not be created.",
+		})
+
+		return nil, diags
+	}
+
+	return licensingService, diags
 }
 
 func (c *apiClient) NewCloudIdentityService() (*cloudidentity.Service, diag.Diagnostics) {

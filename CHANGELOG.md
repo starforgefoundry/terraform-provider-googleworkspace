@@ -1,4 +1,10 @@
 ## 0.8.0 (Unreleased)
+
+FEATURES:
+
+* **New Resource:** `googleworkspace_user_license` - Assigns a Google Workspace product SKU license to a user via the Enterprise License Manager API.
+* **New Datasource:** `googleworkspace_user_license` - Reads the license assignment for a given product/SKU/user tuple.
+
 ## 0.7.0 (June 10, 2022)
 
 FEATURES:
